@@ -309,6 +309,129 @@ $ sudo ln -s /usr/include/nccl.h nccl.h
 ```
 ## Building Tensorflow
 
+### Clone Tensorflow 
 
+```
+$ git clone https://github.com/tensorflow/tensorflow
+$ cd tensorflow
+$ git checkout v2.2.0-rc2
+```
+
+### Configuration 
+```
+$ pip install -U pip six numpy wheel setuptools mock 'future>=0.17.1'
+$ pip install -U keras_applications --no-deps
+$ pip install -U keras_preprocessing --no-deps
+```
+
+now the main part, 
+
+```
+$ ./configure
+You have bazel 2.0.0 installed.
+Please specify the location of python. [Default is /usr/bin/python]: /usr/bin/python3.7
+
+Found possible Python library paths:
+  /usr/local/lib/python3.7/dist-packages
+  /usr/lib/python3.7/dist-packages
+Please input the desired Python library path to use.  Default is [/usr/lib/python3.7/dist-packages]
+
+Do you wish to build TensorFlow with jemalloc as malloc support? [Y/n]: y
+jemalloc as malloc support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with Google Cloud Platform support? [Y/n]: n
+Google Cloud Platform support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with Hadoop File System support? [Y/n]: n
+Hadoop File System support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with Amazon AWS Platform support? [Y/n]: n
+Amazon AWS Platform support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with Apache Kafka Platform support? [Y/n]: n
+Apache Kafka Platform support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with XLA JIT support? [y/N]: n
+No XLA JIT support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with GDR support? [y/N]: n
+No GDR support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with VERBS support? [y/N]: n
+No VERBS support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with OpenCL SYCL support? [y/N]: n
+No OpenCL SYCL support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with CUDA support? [y/N]: Y
+CUDA support will be enabled for TensorFlow.
+
+Please specify the CUDA SDK version you want to use. [Leave empty to default to CUDA 10.1]: 10.1
+
+Please specify the location where CUDA 10.1 toolkit is installed. Refer to README.md for more details. [Default is /usr/local/cuda]:
+
+Please specify the cuDNN version you want to use. [Leave empty to default to cuDNN 7.6]: 
+
+Please specify the location where cuDNN 7 library is installed. Refer to README.md for more details. [Default is /usr/local/cuda]:
+
+Do you wish to build TensorFlow with TensorRT support? [y/N]: n
+No TensorRT support will be enabled for TensorFlow.
+
+Please specify a list of comma-separated Cuda compute capabilities you want to build with.
+You can find the compute capability of your device at: developer.nvidia.com/cuda-gpus
+Please note that each additional compute capability significantly increases your
+build time and binary size. [Default is: 3.5,7.0] 5.2,6.1,7.0
+
+Do you want to use clang as CUDA compiler? [y/N]: n
+nvcc will be used as CUDA compiler.
+
+Please specify which gcc should be used by nvcc as the host compiler. [Default is /usr/bin/gcc]:
+
+Do you wish to build TensorFlow with MPI support? [y/N]: n
+No MPI support will be enabled for TensorFlow.
+
+Please specify optimization flags to use during compilation when bazel option "--config=opt" is specified [Default is -march=native]:
+
+Would you like to interactively configure ./WORKSPACE for Android builds? [y/N]: n
+Not configuring the WORKSPACE for Android builds.
+
+Preconfigured Bazel build configs. You can use any of the below by adding "--config=<>" to your build command. See tools/bazel.rc for more details.
+    --config=mkl            # Build with MKL support.
+Configuration finished
+    --config=monolithic     # Config for mostly static monolithic build.
+```
+
+After this you're almost there.
+
+### Build
+Now using bazel you will build the package, 
+
+```
+bazel build //tensorflow/tools/pip_package:build_pip_package
+```
+If your PC is freezing and hanging due to this build, use this command to build package rather than that,
+
+```
+bazel build --local_ram_resources=2048 --jobs=1 //tensorflow/tools/pip_package:build_pip_package
+```
+This other command will take wayyyy more time but it will get the job done without freezing the PC at any point at all!
+
+
+### Build the package
+```
+$ ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
+```
+
+### Install the package
+```
+$ pip install /tmp/tensorflow_pkg/tensorflow-version-tags.whl
+```
+
+These links helped me the most, 
+https://github.com/Iolaum/CompileTF/blob/master/README.md
+https://gist.github.com/kmhofmann/e368a2ebba05f807fa1a90b3bf9a1e03
+https://www.tensorflow.org/install/source
+https://github.com/bazelbuild/bazel/releases
+https://github.com/tensorflow/tensorflow/issues/31804
 
 
