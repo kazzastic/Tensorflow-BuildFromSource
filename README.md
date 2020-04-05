@@ -429,9 +429,13 @@ $ pip install /tmp/tensorflow_pkg/tensorflow-version-tags.whl
 
 These links helped me the most, 
 https://github.com/Iolaum/CompileTF/blob/master/README.md
+
 https://gist.github.com/kmhofmann/e368a2ebba05f807fa1a90b3bf9a1e03
+
 https://www.tensorflow.org/install/source
+
 https://github.com/bazelbuild/bazel/releases
+
 https://github.com/tensorflow/tensorflow/issues/31804
 
 
