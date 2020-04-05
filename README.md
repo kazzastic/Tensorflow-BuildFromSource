@@ -154,9 +154,9 @@ $ ll | grep cudnn
 
 $ sudo dpkg -i libcudnn7-doc_7.6.5.32-1+cuda10.1_amd64.deb
  
-$ sudo dpkg -i libcudnn7-dev_7.6.5.32-1+cuda10.2_amd64.deb
+$ sudo dpkg -i libcudnn7-dev_7.6.5.32-1+cuda10.1_amd64.deb
  
-$ sudo dpkg -i libcudnn7_7.6.5.32-1+cuda10.2_amd64.deb
+$ sudo dpkg -i libcudnn7_7.6.5.32-1+cuda10.1_amd64.deb
 
 $ apt search libcudnn7
 ```
@@ -224,4 +224,30 @@ $ dpkg-query -L libcudnn7-dev
 /usr/share/lintian/overrides/libcudnn7-dev
 ```
 We decide to use `/etc/alternatives/` for the tensorflow configuration.
+
+## Install Bazel 
+
+### Release Version of Bazel 
+The most suitable for our build can be checked [here](https://www.tensorflow.org/install/source#tested_build_configurations) further more navigate to correct release version of bazel from [here](https://github.com/bazelbuild/bazel/releases) I used bazel version 2.0.0 
+download the `bazel-2.0.0-installer-linux-x86_64.sh` 
+
+```
+$ cd where-bazel-is-downloaded
+
+$ chmod +x bazel-2.0.0-installer-linux-x86_64.sh
+
+$ ./bazel-2.0.0-installer-linux-x86_64.sh --user
+```
+this would install the bazel. Now setup the enviroment, 
+```
+export PATH="$PATH:$HOME/bin"
+```
+add these lines to your ./bashrc file, you can open this file with these commands, 
+```
+$ nano ~/.bashrc
+```
+
+
+
+
 
