@@ -116,3 +116,112 @@ Built on Sun_Jul_28_19:07:16_PDT_2019
 Cuda compilation tools, release 10.1, V10.1.243
 ```
 if you get any error here reach out to github/stackoverflow community. 
+
+If you run into any gcc or gnu version error till now, or in any further installation then install these versions of gcc and gnu, 
+```
+$ sudo apt-get install -y software-properties-common
+
+$ sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+
+$ sudo apt update
+
+$ sudo apt install g++-7 -y
+```
+Set it up so the symbolic links gcc, g++ point to the newer version:
+```
+$ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60 \
+                         --slave /usr/bin/g++ g++ /usr/bin/g++-7 
+
+$ sudo update-alternatives --config gcc
+
+$ gcc --version
+
+$ g++ --version
+```
+
+### cuDNN v7.6.5 for CUDA 10.1
+
+You can find the file [here](https://developer.nvidia.com/rdp/cudnn-download), you might have to sign up to download it. 
+Download the given packages 
+- cuDNN Runtime Library for Ubuntu18.04 (Deb)
+- cuDNN Developer Library for Ubuntu18.04 (Deb)
+- cuDNN Code Samples and User Guide for Ubuntu18.04 (Deb)
+These are for Ubuntu 18.04 but they work like a charm even on Ubuntu 19.10
+
+```
+# see files we downloaded
+$ ll | grep cudnn
+
+$ sudo dpkg -i libcudnn7-doc_7.6.5.32-1+cuda10.1_amd64.deb
+ 
+$ sudo dpkg -i libcudnn7-dev_7.6.5.32-1+cuda10.2_amd64.deb
+ 
+$ sudo dpkg -i libcudnn7_7.6.5.32-1+cuda10.2_amd64.deb
+
+$ apt search libcudnn7
+```
+navigate the packages and install each as above.
+We then test the CUDNN installation with:
+```
+$ cp -r /usr/src/cudnn_samples_v7/ ~/test/
+$ cd ~/test/mnistCUDNN/
+$ make clean && make
+$ $ ./mnistCUDNN
+# ...
+# Test passed!
+```
+We need to know where CUDDN7 is installed for tensorflow build configuration
+```
+$ whereis cudnn
+
+cudnn: /usr/include/cudnn.h
+
+$ ll /usr/include/ | grep cudnn
+
+lrwxrwxrwx  1 root root     26 Sep 29 22:06 cudnn.h -> /etc/alternatives/libcudnn
+
+$ ll /etc/alternatives/libcudnn
+
+libcudnn        libcudnn_so     libcudnn_stlib
+  
+$ ll /etc/alternatives/ | grep cudnn
+lrwxrwxrwx   1 root root    40 Sep 29 22:06 libcudnn -> /usr/include/x86_64-linux-gnu/cudnn_v7.h
+lrwxrwxrwx   1 root root    39 Sep 29 22:06 libcudnn_so -> /usr/lib/x86_64-linux-gnu/libcudnn.so.7
+lrwxrwxrwx   1 root root    46 Sep 29 22:06 libcudnn_stlib -> /usr/lib/x86_64-linux-gnu/libcudnn_static_v7.a
+
+$ dpkg-query -L libcudnn7
+/.
+/usr
+/usr/lib
+/usr/lib/x86_64-linux-gnu
+/usr/lib/x86_64-linux-gnu/libcudnn.so.7.3.1
+/usr/share
+/usr/share/doc
+/usr/share/doc/libcudnn7
+/usr/share/doc/libcudnn7/changelog.Debian.gz
+/usr/share/doc/libcudnn7/copyright
+/usr/share/lintian
+/usr/share/lintian/overrides
+/usr/share/lintian/overrides/libcudnn7
+/usr/lib/x86_64-linux-gnu/libcudnn.so.7
+
+$ dpkg-query -L libcudnn7-dev 
+/.
+/usr
+/usr/include
+/usr/include/x86_64-linux-gnu
+/usr/include/x86_64-linux-gnu/cudnn_v7.h
+/usr/lib
+/usr/lib/x86_64-linux-gnu
+/usr/lib/x86_64-linux-gnu/libcudnn_static_v7.a
+/usr/share
+/usr/share/doc
+/usr/share/doc/libcudnn7-dev
+/usr/share/doc/libcudnn7-dev/changelog.Debian.gz
+/usr/share/doc/libcudnn7-dev/copyright
+/usr/share/lintian
+/usr/share/lintian/overrides
+/usr/share/lintian/overrides/libcudnn7-dev
+```
+We decide to use `/etc/alternatives/` for the tensorflow configuration.
+
