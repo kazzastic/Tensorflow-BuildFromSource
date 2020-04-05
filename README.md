@@ -247,6 +247,67 @@ add these lines to your ./bashrc file, you can open this file with these command
 $ nano ~/.bashrc
 ```
 
+### NVIDIA Collective Communications Library (NCCL)
+From [here](https://developer.nvidia.com/nccl/nccl-download) download `Download NCCL v2.6.4, for CUDA 10.1, March 26,2020`. When enabling CUDA tensorflow asks us to specify the nccl library location. We go at this nvidia webpage to install it. We download the network installer, so that it is more straightforward to get updates.
+
+```
+$ sudo dpkg-i nccl-repo-ubuntu1804-2.6.4-ga-cuda10.2_1-1_amd64.deb 
+
+$ sudo apt update
+
+$ apt search libnccl
+Full Text Search... Done
+libnccl-dev/unknown 2.3.5-2+cuda10.0 amd64
+  NVIDIA Collectives Communication Library (NCCL) Development Files
+
+libnccl2/unknown 2.3.5-2+cuda10.0 amd64
+  NVIDIA Collectives Communication Library (NCCL) Runtime
+
+$ sudo apt install libnccl2 libnccl-dev
+
+# See where the libraries got installed
+$ dpkg-query -L libnccl-dev libnccl2
+/.
+/usr
+/usr/include
+/usr/include/nccl.h
+/usr/lib
+/usr/lib/x86_64-linux-gnu
+/usr/lib/x86_64-linux-gnu/libnccl_static.a
+/usr/share
+/usr/share/doc
+/usr/share/doc/libnccl-dev
+/usr/share/doc/libnccl-dev/changelog.Debian.gz
+/usr/share/doc/libnccl-dev/copyright
+/usr/lib/x86_64-linux-gnu/libnccl.so
+
+/.
+/usr
+/usr/lib
+/usr/lib/x86_64-linux-gnu
+/usr/lib/x86_64-linux-gnu/libnccl.so.2.3.5
+/usr/share
+/usr/share/doc
+/usr/share/doc/libnccl2
+/usr/share/doc/libnccl2/changelog.Debian.gz
+/usr/share/doc/libnccl2/copyright
+/usr/lib/x86_64-linux-gnu/libnccl.so.2
+```
+We decide to create symbolic links from within the cuda installation to where they are:
+```
+$ cd /usr/local/cuda/
+
+$ sudo mkdir lib
+
+$ cd lib
+
+$ sudo ln -s /usr/lib/x86_64-linux-gnu/libnccl.so.2 libnccl.so.2
+
+$ cd ../include
+
+$ sudo ln -s /usr/include/nccl.h nccl.h
+```
+## Building Tensorflow
 
 
 
