@@ -32,4 +32,36 @@ $ sudo apt-key add /var/cuda-repo-10-1-local-10.1.243-418.87.00/7fa2af80.pub
 $ sudo apt-get update
 
 $ sudo apt-get -y install cuda
+```
+now, if you had already tried installing an nvidia toolkit before then you might run into this minor problem which might give you following error.
+
+```
+$ sudo apt-get install cuda
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+Some packages could not be installed. This may mean that you have
+requested an impossible situation or if you are using the unstable
+distribution that some required packages have not yet been created
+or been moved out of Incoming.
+The following information may help to resolve the situation:
+
+The following packages have unmet dependencies.
+ cuda : Depends: cuda-10-0 (>= 10.0.130) but it is not going to be installed
+E: Unable to correct problems, you have held broken packages
+```
+this is normal and can be solved by the following commands, 
+
+```
+$ sudo add-apt-repository -r ppa:graphics-drivers/ppa
+
+$ sudo apt remove nvidia-*
+
+$ sudo apt autoremove
+```
+this should solved the problem by removing previouly installed toolkits of any version, and now proceed where you left from meaning, 
+
+```
+$ sudo apt install cuda
 ``` 
+
