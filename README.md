@@ -63,5 +63,56 @@ this should solved the problem by removing previouly installed toolkits of any v
 
 ```
 $ sudo apt install cuda
-``` 
+```
+once done installing, modify the `~/.profile` file and add the following lines, 
+first gedit, nano or vim open the file using following command, 
+```
+$ nano ~/.profile
+```
+then add these lines, 
+```
+# set PATH for cuda 10.1 installation
+if [ -d "/usr/local/cuda-10.1/bin/" ]; then
+    export PATH=/usr/local/cuda-10.1/bin${PATH:+:${PATH}}
+    export LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+fi
+```
+then compile this once, just to be sure!
+```
+$ source ~/.profile
+```
+now restart the OS once or use this,
+```
+$ sudo reboot now
+```
+Now check the installation using these commmands, 
+```
+$ nvidia-smi
+Sun Apr  5 18:34:20 2020       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 440.64.00    Driver Version: 440.64.00    CUDA Version: 10.2     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  GeForce GTX 105...  On   | 00000000:0F:00.0  On |                  N/A |
+|  0%   46C    P0    N/A /  72W |    341MiB /  4038MiB |     15%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+|    0      1113      G   /usr/lib/xorg/Xorg                            14MiB |
+|    0      1705      G   /usr/lib/xorg/Xorg                            85MiB |
+|    0      1912      G   /usr/bin/gnome-shell                         101MiB |
+|    0      7262      G   ...AAAAAAAAAAAAAAgAAAAAAAAA --shared-files    88MiB |
++-----------------------------------------------------------------------------+
 
+$ nvcc -V
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2019 NVIDIA Corporation
+Built on Sun_Jul_28_19:07:16_PDT_2019
+Cuda compilation tools, release 10.1, V10.1.243
+```
+if you get any error here reach out to github/stackoverflow community. 
